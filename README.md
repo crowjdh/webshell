@@ -8,10 +8,10 @@ npm install
 npm run server
 ```
 
-# Hack
+# Inject
 ```console
 npm run generate_payload
-./hack.sh "ls -lah /"
+./inject.sh
 ```
 
 # Exploit
