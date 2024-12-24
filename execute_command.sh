@@ -6,7 +6,7 @@ INTERACTIVE=0
 
 send_command() {
   COMMAND=$(printf -- "$1" | sed -E "s/ /%20/g")
-  curl localhost:6660\?cmd="$COMMAND"
+  curl ${HOST_URL:-localhost}:6660\?cmd="$COMMAND"
 }
 
 while [ $# -gt 0 ] && [ ${1:0:1} = "-" ]; do
