@@ -37,7 +37,7 @@ else
   while true; do
     read -p "Command: " COMMAND
 
-    if [ $COMMAND = "exit" ]; then
+    if [ "$COMMAND" = "exit" ]; then
       break
     fi
 
